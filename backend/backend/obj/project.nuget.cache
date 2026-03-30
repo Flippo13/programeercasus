@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "RDAN5AMyelI=",
+  "success": true,
+  "projectFilePath": "/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/backend.csproj",
+  "expectedPackageFiles": [
+    "/home/felix/.nuget/packages/microsoft.aspnetcore.app.ref/10.0.4/microsoft.aspnetcore.app.ref.10.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}
