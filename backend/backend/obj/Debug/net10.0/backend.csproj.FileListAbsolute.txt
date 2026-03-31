@@ -1,0 +1,6 @@
+/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/obj/Debug/net10.0/backend.csproj.AssemblyReference.cache
+/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/obj/Debug/net10.0/backend.GeneratedMSBuildEditorConfig.editorconfig
+/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/obj/Debug/net10.0/backend.AssemblyInfoInputs.cache
+/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/obj/Debug/net10.0/backend.AssemblyInfo.cs
+/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/obj/Debug/net10.0/backend.csproj.CoreCompileInputs.cache
+/home/felix/Work/repos/github.com/Flippo13/wigo4-it-project/backend/backend/obj/Debug/net10.0/backend.sourcelink.json
