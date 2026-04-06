@@ -1,0 +1,7 @@
+./Debug
+
+*.obj
+*.txt
+*.log
+./obj/Debug
+./bin/Release
