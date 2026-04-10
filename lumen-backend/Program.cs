@@ -4,29 +4,47 @@ using LumenAPI.Identity.Database;
 using LumenAPI.Database;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using LumenAPI.Identity.Routing;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Keycloak;
+
 
 var builder = WebApplication.CreateBuilder(args); 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter(); 
 builder.Services.AddEndpointsApiExplorer(); 
-builder.Services.AddOpenApiDocument(config => {
-    config.DocumentName= "LumenAPI";
-    config.Title = "LumenAPI v1"; 
-    config.Version = "v1"; 
-    }); 
-builder.Services.AddEndpointsApiExplorer(); 
-// Identity and Authentication
-builder.Services.AddAuthentication()
-    .AddCookie(IdentityConstants.ApplicationScheme);
-builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = $"{builder.Configuration["Keycloak:BaseUrl"]}/realms/{builder.Configuration["Keycloak:Realm"]}",
 
-builder.Services.AddCors(options =>
+        ValidateAudience = true,
+        ValidAudience = "account",
+
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = false,
+
+        IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
         {
-            options.AddPolicy("AllowFrontend",
-        builder => builder.WithOrigins("http://localhost:3000")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .AllowCredentials());
+            var client = new HttpClient();
+            var keyUri = $"{parameters.ValidIssuer}/protocol/openid-connect/certs";
+            var response = client.GetAsync(keyUri).Result;
+            var keys = new JsonWebKeySet(response.Content.ReadAsStringAsync().Result);
+
+            return keys.GetSigningKeys();
+        }
+    };
+    options.RequireHttpsMetadata = false; // Only for develop
+    options.SaveToken = true;
 });
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<KeycloakAuthService>();
 // Identity services
 builder.Services.AddIdentityCore<UserAccount>()
     .AddEntityFrameworkStores<UserAccountDbContext>()
