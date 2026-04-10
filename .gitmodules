@@ -1,0 +1,3 @@
+[submodule "lumen-frontend"]
+	path = lumen-frontend
+	url = https://github.com/Flippo13/lumen-frontend
