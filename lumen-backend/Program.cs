@@ -12,6 +12,18 @@ using Keycloak;
 var builder = WebApplication.CreateBuilder(args); 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter(); 
 builder.Services.AddEndpointsApiExplorer(); 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // ✅ Allow frontend origin
+                  .AllowAnyMethod()                   // ✅ Allow all HTTP methods
+                  .AllowAnyHeader();                  // ✅ Allow all headers
+        });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,7 +70,6 @@ options.UseNpgsql(builder.Configuration.GetConnectionString("LearningResourceCon
 
 builder.Services.AddControllers(); // Add controllers for API endpoints
 var app = builder.Build(); 
-app.UseCors("AllowFrontend");
 if(app.Environment.IsDevelopment())
 {
   app.UseOpenApi(); 
@@ -75,6 +86,10 @@ if(app.Environment.IsDevelopment())
 // See https://aka.ms/new-console-tempa te for more information
 app.MapGet("api/hello", () => Results.Json(new { message = "Hello World" }));
 
-app.MapControllers();
 app.MapCustomIdentityApi<UserAccount>(); // Map Identity API endpoints
+app.UseCors("AllowFrontend"); // ✅ Must be before app.UseAuthorization() and app.MapControllers()
+
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
 app.Run(); 

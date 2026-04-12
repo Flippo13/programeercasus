@@ -17,16 +17,16 @@ namespace Keycloak
         {
             var tokenEndpoint = $"{configuration["Keycloak:BaseUrl"]}/realms/{configuration["Keycloak:Realm"]}/protocol/openid-connect/token";
 
-            var requestData = new Dictionary<string, string>
-            {
-                { "client_id", configuration["Keycloak:ClientId"] },
-                { "client_secret", configuration["Keycloak:ClientSecret"] },
-                { "grant_type", "password" },
-                { "username", username },
-                { "password", password }
-            };
+            var requestBody = new Dictionary<string, string>
+        {
+            { "grant_type", "password" },
+            { "client_id", configuration["Keycloak:ClientId"] },
+            { "client_secret", configuration["Keycloak:ClientSecret"] }, 
+            { "username", username },
+            { "password", password }
+        };
 
-            var content = FormUrlEncodedContent(requestData);
+            var content = new FormUrlEncodedContent(requestBody);
 
             var response = await httpClient.PostAsync(tokenEndpoint, content);
 
